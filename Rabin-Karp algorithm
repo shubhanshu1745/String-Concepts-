@@ -1,0 +1,61 @@
+#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#define ll long long
+using namespace std;
+long long M = 1e9 + 7;
+
+ll Mod(ll a) {
+    return (a % M + M) % M;
+}
+
+ll sum(ll a, ll b) {
+    return (Mod(a) + Mod(b)) % M;
+}
+
+ll subs(ll a, ll b) {
+    return (Mod(a) - Mod(b) + M) % M;
+}
+
+ll mul(ll a, ll b) {
+    return (Mod(a) * Mod(b)) % M;
+}
+
+int main() {
+    string text;
+    string pattern;
+    cin >> text >> pattern;
+    ll p = 31;
+    int tn = text.size();
+    int pn = pattern.size();
+
+    vector<ll> powerMod(tn);
+    powerMod[0] = 1;
+    for (int i = 1; i < tn; i++) {
+        powerMod[i] = mul(powerMod[i - 1], p);
+    }
+
+    ll ph = 0;
+    for (int i = 0; i < pn; i++) {
+        ph = sum(ph, mul(pattern[i] - 'a' + 1, powerMod[i]));
+    }
+
+    vector<ll> th(tn + 1);
+    th[0] = 0;
+    for (int i = 0; i < tn; i++) {
+        th[i + 1] = sum(th[i], mul(text[i] - 'a' + 1, powerMod[i]));
+    }
+
+    int count = 0;
+    for (int i = 0; i <= tn - pn; i++) {
+        ll hashVal = subs(th[i + pn], th[i]);
+        if (hashVal == mul(ph, powerMod[i])) {
+            if (text.substr(i, pn) == pattern) {
+                count++;
+            }
+        }
+    }
+
+    cout << count << endl;
+    return 0;
+}
