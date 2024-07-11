@@ -1,0 +1,32 @@
+#include<bits/stdc++.h>
+#include <iostream>
+#include <string>
+
+int countOccurrences(const std::string &text, const std::string &pattern) {
+    int count=0;
+    int textlen=text.size();
+    int patternlen=pattern.size();
+    for(int i=0;i<=textlen-patternlen;i++){
+        bool match=true;
+        for(int j=0;j<patternlen;j++){
+            if(text[i+j]!=pattern[j]){
+                match=false;
+                break;
+            }
+        }
+        if(match){
+            count++;
+        }
+    }
+    return count;
+}
+
+int main() {
+    std::string text = "abcabcabc";
+    std::string pattern = "abc";
+
+    int occurrences = countOccurrences(text, pattern);
+    std::cout << "Number of occurrences of '" << pattern << "' in '" << text << "': " << occurrences << std::endl;
+
+    return 0;
+}
